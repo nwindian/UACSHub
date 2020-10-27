@@ -76,6 +76,51 @@ app.get('/getName', cors(), (req, res) => {
 	})
   })
 
+  
+  app.post('/deleteTechnology', cors(), (req, res) => {
+	var data = JSON.parse(JSON.stringify(req.body.value))
+	for(tech in data){
+		db.query("SELECT userid FROM users WHERE loggedin=true", (err, row, field) => {
+			
+			if (!err)
+			console.log(row)
+			id = row[0].userid
+			query = `DELETE FROM attributes a WHERE a.userid = ${id} AND technology = "${data[tech]}";`;
+			db.query(query, (error, rows, fields) => {
+				if (!error){
+					res.send(rows)
+				}
+				else
+					console.log(error)
+			});
+			if(err)
+				console.log(err)
+		})
+	}
+  })
+
+  app.post('/deleteClass', cors(), (req, res) => {
+	var data = JSON.parse(JSON.stringify(req.body.value))
+	for(tclass in data){
+		db.query("SELECT userid FROM users WHERE loggedin=true", (err, row, field) => {
+			
+			if (!err)
+			console.log(row)
+			id = row[0].userid
+			query = `DELETE FROM attributes a WHERE a.userid = ${id} AND class = "${data[tclass]}";`;
+			db.query(query, (error, rows, fields) => {
+				if (!error){
+					res.send(rows)
+				}
+				else
+					console.log(error)
+			});
+			if(err)
+				console.log(err)
+		})
+	}
+  })
+
 app.listen(8080, () => {
 	console.log("Server started on port 8080");
 })

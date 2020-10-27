@@ -70,13 +70,35 @@
                         }).done(function (data){
                             for(i=0; i < data.length; i++){
                                 if (data[i].class != null)
-                                    $('#list-item').append(`<li> ${data[i].class} </li>`)
+                                    $('#list-item').append(`<li><input type="checkbox" name="class-check" id=${data[i].class}/>  ${data[i].class} </li>`)
                             }
                         }).fail(function(jqXHR, textStatus, errorThrown){
                             alert("AJAX call failed: " + textStatus + ", " + errorThrown);
                         });                       
                     </script>
+                    
                 </div>
+                <button type="button" id="delete-class">Delete</button>
+                <script>
+                    $(document).on('click', '#delete-class', function() {
+                            var checkboxes = document.getElementsByName('class-check');
+                            var checked = [];
+                            for (var i = 0; i < checkboxes.length; i++){
+                                if (checkboxes[i].checked) {
+                                    cname = checkboxes[i].id.slice(0,-1)
+                                    checked.push(cname)
+                                }
+                            }
+                            var xhr = new XMLHttpRequest();
+                            xhr.open("POST", "http://localhost:8080/deleteClass", true)
+                            xhr.setRequestHeader('Content-Type', 'application/json')
+                            
+                            xhr.send(JSON.stringify({
+                                value: checked
+                            }))
+                        
+                    });               
+                </script>
             </div>
         </div>
         <div class="section">
@@ -92,7 +114,7 @@
                         }).done(function (data){
                             for(i=0; i < data.length; i++){
                                 if (data[i].technology != null)
-                                    $('#skills-item').append(`<li> ${data[i].technology} </li>`)
+                                    $('#skills-item').append(`<li><input type="checkbox" id=${data[i].technology} name="technology-check"/> ${data[i].technology} </li>`)
                             }
                         }).fail(function(jqXHR, textStatus, errorThrown){
                             alert("AJAX call failed: " + textStatus + ", " + errorThrown);
@@ -101,6 +123,26 @@
                     </script>
                     </div></div>
                 </div>
+            <button type="button" id="delete-tech">Delete</button>
+            <script>
+                $(document).on('click', '#delete-tech', function() {
+                        var checkboxes = document.getElementsByName('technology-check');
+                        var checked = [];
+                        for (var i = 0; i < checkboxes.length; i++){
+                            if (checkboxes[i].checked) {
+                                checked.push(checkboxes[i].id)
+                            }
+                        }
+                        var xhr = new XMLHttpRequest();
+                        xhr.open("POST", "http://localhost:8080/deleteTechnology", true)
+                        xhr.setRequestHeader('Content-Type', 'application/json')
+                        
+                        xhr.send(JSON.stringify({
+                            value: checked
+                        }))
+                    
+                });               
+            </script>
             </div>           
         </div>
         <div class="section">
