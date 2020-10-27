@@ -4,16 +4,16 @@
 
 2. Run the following commands in the CMD prompt
 
-  npm i express mysql dotenv hbs
+  >npm i express mysql dotenv hbs
   
-  npm i --save nodemon
+  >npm i --save nodemon
   
-  npm i bcrpytjs
+  >npm i bcrpytjs
   
-  npm i cookie-parser jsonwebtoken
+  >npm i cookie-parser jsonwebtoken
 
 3. Run the following command to start
 
-  npm start
+  >npm start
   
 Go to "localhost:8080" in browser to view the site
