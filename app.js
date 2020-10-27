@@ -1,9 +1,13 @@
 const express = require("express");
 const mysql = require("mysql");
+const cors = require("cors")
 const app = express();
 const dotenv = require('dotenv');
 const cookieParser = require('cookie-parser');
 const path = require('path');
+
+app.use(cors({credentials: true, origin: "https://localhost:8080"}));
+app.options('*', cors());
 
 dotenv.config({ path: './.env'}); //allows us to hide sensitive database names and details
 
@@ -36,6 +40,41 @@ db.connect ( (error) => {
 //Define Routes
 app.use('/', require('./routes/pages'));
 app.use('/auth', require('./routes/auth'));
+
+app.get('/getName', cors(), (req, res) => {
+	db.query("SELECT name FROM users WHERE loggedin=true", (err, rows, fields) => {
+	  if (!err)
+	  res.send(rows);
+	  else
+	  console.log(err);
+	})
+  })
+  
+  app.get('/getEmail', cors(), (req, res) => {
+	db.query("SELECT email FROM users WHERE loggedin=true", (err, rows, fields) => {
+	  if (!err)
+	  res.send(rows);
+	  else
+	  console.log(err);
+	})
+  })
+
+  app.get('/getAttributes', cors(), (req, res) => {
+	db.query("SELECT userid FROM users WHERE loggedin=true", (err, row, field) => {
+		if (!err)
+		console.log(row)
+		id = row[0].userid
+		db.query(`SELECT u.userid, a.technology, a.class FROM users u inner join attributes a on u.userid = a.userid WHERE u.userid = ${id};`, (error, rows, fields) => {
+			if (!error){
+				res.send(rows)
+			}
+			else
+				console.log(error)
+		});
+		if(err)
+			console.log(err)
+	})
+  })
 
 app.listen(8080, () => {
 	console.log("Server started on port 8080");

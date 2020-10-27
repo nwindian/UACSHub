@@ -40,8 +40,10 @@ exports.login = async (req, res) => {
                     httpOnly: true
                 }
 
+                db.query(`UPDATE users SET loggedin = true WHERE userid = ${results[0].userID}`)
+
                 res.cookie('jwt', token, cookieOptions);
-                res.status(200).redirect("/"); // redirect to homepage
+                res.status(200).redirect("/profile"); // redirect to homepage
             }
 
         })
