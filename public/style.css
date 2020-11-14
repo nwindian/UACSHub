@@ -27,3 +27,7 @@ nav li a:hover {
 	color: pink;
 	text-decoration: none;
 }
+
+#classtable {
+  border-spacing: 0.5rem;
+}
