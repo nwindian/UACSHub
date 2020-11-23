@@ -5,9 +5,14 @@ const app = express();
 const dotenv = require('dotenv');
 const cookieParser = require('cookie-parser');
 const path = require('path');
+const bodyParser = require('body-parser')
 
 app.use(cors({credentials: true, origin: "https://localhost:8080"}));
 app.options('*', cors());
+
+app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.json());
+
 
 dotenv.config({ path: './.env'}); //allows us to hide sensitive database names and details
 
@@ -79,6 +84,7 @@ app.get('/getName', cors(), (req, res) => {
   
   app.post('/deleteTechnology', cors(), (req, res) => {
 	var data = JSON.parse(JSON.stringify(req.body.value))
+	console.log(data)
 	for(tech in data){
 		db.query("SELECT userid FROM users WHERE loggedin=true", (err, row, field) => {
 			
@@ -133,13 +139,48 @@ app.get('/getName', cors(), (req, res) => {
 
   app.post('/addClass', cors(), (req, res) => {
 	var data = JSON.parse(JSON.stringify(req.body.value))
-	for(tclass in data){
-		db.query("SELECT userid FROM users WHERE loggedin=true", (err, row, field) => {
-			
-			if (!err)
+	console.log(data)
+
+	// db.query("SELECT userid FROM users WHERE loggedin=true", (err, row, field) => {
+		
+	// 	if (!err)
+	// 	console.log(row)
+	// 	id = row[0].userid
+	// 	query = `UPDATE attributes SET class=${data} WHERE userid = ${id};`;
+	// 	console.log(query)
+	// 	db.query(query, (error, rows, fields) => {
+	// 		if (!error){
+	// 			res.send(rows)
+	// 		}
+	// 		else
+	// 			console.log(error)
+	// 	});
+	// 	if(err)
+	// 		console.log(err)
+	// })
+	
+  })
+
+  app.post('/addTech', cors(), (req, res) => {
+	
+	data = req.body.value
+	// console.log(req)
+	// console.log(req.params)
+	// console.log("req.body: " + req.body)
+	// console.log("req.body.value: " + req.body.value)
+	// console.log("stringify req.body: " + JSON.stringify(req.body))
+	// console.log("stringify req.body.value: " + JSON.stringify(req.body.value))
+	// console.log("parse stringify req.body" + JSON.parse(req.body))
+	// console.log("parse stringify req.body.value" + JSON.parse(JSON.parse(req.body.value)))
+	// var data = JSON.parse(JSON.stringify(req.body)).value
+	console.log(req.body.value)
+
+	db.query("SELECT userid FROM users WHERE loggedin=true", (err, row, field) => {
+		
+		if (!err)
 			console.log(row)
 			id = row[0].userid
-			query = `DELETE FROM attributes a WHERE a.userid = ${id} AND class = "${data[tclass]}";`;
+			query = `INSERT INTO attributes (userID, technology) VALUES (${id}, '${data}')`;
 			console.log(query)
 			db.query(query, (error, rows, fields) => {
 				if (!error){
@@ -148,10 +189,10 @@ app.get('/getName', cors(), (req, res) => {
 				else
 					console.log(error)
 			});
-			if(err)
-				console.log(err)
-		})
-	}
+		if(err)
+			console.log(err)
+	})
+	
   })
 
 

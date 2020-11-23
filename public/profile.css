@@ -15,7 +15,7 @@
   }
   
   .container {
-    max-width: 1400px; 
+    max-width: 70%; 
     max-height: 4000px;  
     background: #fff;
     margin: 0px 0px 0px; 
@@ -30,6 +30,7 @@
   }
   #classtable {
     float: right;
+    position: relative;
     display: inline-block;
     border: 1px solid black;
     padding: 10px;
@@ -40,6 +41,7 @@
     margin-right: 0px;
     margin-left: auto;
     vertical-align: top;
+
 }
 
 td, th {
