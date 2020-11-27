@@ -6,6 +6,17 @@ const dotenv = require('dotenv');
 const cookieParser = require('cookie-parser');
 const path = require('path');
 const bodyParser = require('body-parser')
+var WebSocket = require('ws')
+var http = require('http').createServer(app)
+var io = require('socket.io')(http);
+io.listen(http)
+const wss = new WebSocket.Server({ noServer: true });
+
+io.on('upgrade', function (request, socket, head) {
+  wss.handleUpgrade(request, socket, head, function (ws) {
+     wss.emit('connection', ws, request);
+  })
+})
 
 app.use(cors({credentials: true, origin: "https://localhost:8080"}));
 app.options('*', cors());
@@ -141,23 +152,24 @@ app.get('/getName', cors(), (req, res) => {
 	var data = JSON.parse(JSON.stringify(req.body.value))
 	console.log(data)
 
-	// db.query("SELECT userid FROM users WHERE loggedin=true", (err, row, field) => {
+	db.query("SELECT userid FROM users WHERE loggedin=true", (err, row, field) => {
 		
-	// 	if (!err)
-	// 	console.log(row)
-	// 	id = row[0].userid
-	// 	query = `UPDATE attributes SET class=${data} WHERE userid = ${id};`;
-	// 	console.log(query)
-	// 	db.query(query, (error, rows, fields) => {
-	// 		if (!error){
-	// 			res.send(rows)
-	// 		}
-	// 		else
-	// 			console.log(error)
-	// 	});
-	// 	if(err)
-	// 		console.log(err)
-	// })
+		if (!err)
+		console.log(row)
+		id = row[0].userid
+
+		query = `INSERT INTO attributes (userID, class) VALUES (${id}, '${data}');`;
+		console.log(query)
+		db.query(query, (error, rows, fields) => {
+			if (!error){
+				res.send(rows)
+			}
+			else
+				console.log(error)
+		});
+		if(err)
+			console.log(err)
+	})
 	
   })
 
@@ -196,7 +208,29 @@ app.get('/getName', cors(), (req, res) => {
   })
 
 
+	// io.sockets.on('connection', function(socket) {
+	// 	socket.on('username', function(username) {
+	// 		socket.username = username;
+	// 		io.emit('is_online', '🔵 <i>' + socket.username + ' join the chat..</i>');
+	// 	});
 
-app.listen(8080, () => {
-	console.log("Server started on port 8080");
-})
+	// 	socket.on('disconnect', function(username) {
+	// 		io.emit('is_online', '🔴 <i>' + socket.username + ' left the chat..</i>');
+	// 	})
+
+	// 	socket.on('chat_message', function(message) {
+	// 		io.emit('chat_message', '<strong>' + socket.username + '</strong>: ' + message);
+	// 	});
+
+	// });
+	io.on('connection', function(socket){
+		socket.on('chat message', function(msg){
+		  io.emit('chat message', msg);
+		});
+	  });
+  
+
+http.listen(8080)
+// app.listen(8080, () => {
+// 	console.log("Server started on port 8080");
+// })

@@ -18,4 +18,8 @@ router.get('/profile', (req, res) => {
     res.render('profile')
 })
 
+router.get('/chatroom', (req, res) => {
+    res.render('chatroom')
+})
+
 module.exports = router;
