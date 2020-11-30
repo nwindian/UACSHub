@@ -176,15 +176,6 @@ app.get('/getName', cors(), (req, res) => {
   app.post('/addTech', cors(), (req, res) => {
 	
 	data = req.body.value
-	// console.log(req)
-	// console.log(req.params)
-	// console.log("req.body: " + req.body)
-	// console.log("req.body.value: " + req.body.value)
-	// console.log("stringify req.body: " + JSON.stringify(req.body))
-	// console.log("stringify req.body.value: " + JSON.stringify(req.body.value))
-	// console.log("parse stringify req.body" + JSON.parse(req.body))
-	// console.log("parse stringify req.body.value" + JSON.parse(JSON.parse(req.body.value)))
-	// var data = JSON.parse(JSON.stringify(req.body)).value
 	console.log(req.body.value)
 
 	db.query("SELECT userid FROM users WHERE loggedin=true", (err, row, field) => {
@@ -207,27 +198,35 @@ app.get('/getName', cors(), (req, res) => {
 	
   })
 
+  app.get('/getUserName', cors(), (req, res) => {
+	db.query("SELECT name FROM users WHERE loggedin=true", (err, row, field) => {
+		if(!err){
+			console.log(row[0].name)
+			res.send(row)
+		}
+		else{
+			console.log(err)
+		}
 
-	// io.sockets.on('connection', function(socket) {
-	// 	socket.on('username', function(username) {
-	// 		socket.username = username;
-	// 		io.emit('is_online', '🔵 <i>' + socket.username + ' join the chat..</i>');
-	// 	});
+	})
+  })
 
-	// 	socket.on('disconnect', function(username) {
-	// 		io.emit('is_online', '🔴 <i>' + socket.username + ' left the chat..</i>');
-	// 	})
 
-	// 	socket.on('chat_message', function(message) {
-	// 		io.emit('chat_message', '<strong>' + socket.username + '</strong>: ' + message);
-	// 	});
-
-	// });
-	io.on('connection', function(socket){
-		socket.on('chat message', function(msg){
-		  io.emit('chat message', msg);
+	io.on('connection', function(socket) {
+		socket.on('username', function(username) {
+			socket.username = username;
+			io.emit('is_online', '🔵 <i>' + socket.username + ' join the chat..</i>');
 		});
-	  });
+
+		socket.on('disconnect', function(username) {
+			io.emit('is_online', '🔴 <i>' + socket.username + ' left the chat..</i>');
+		})
+
+		socket.on('chat_message', function(message) {
+			io.emit('chat_message', '<strong>' + socket.username + '</strong>: ' + message);
+		});
+
+	});
   
 
 http.listen(8080)

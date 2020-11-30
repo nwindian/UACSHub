@@ -30,6 +30,7 @@
                     dataType: "json"
                 }).done(function (data){
                     $('#full-name').text(data[0].name)
+                    document.cookie = `name=${data[0].name}`
                 }).fail(function(jqXHR, textStatus, errorThrown){
                     alert("AJAX call failed: " + textStatus + ", " + errorThrown);
                 });
