@@ -24,6 +24,7 @@ app.options('*', cors());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
+app.use(express.static('views/images')); 
 
 dotenv.config({ path: './.env'}); //allows us to hide sensitive database names and details
 

@@ -7,14 +7,71 @@
 	<link rel="stylesheet" href="/style.css">
 	<title>UACShub</title>
 </head>
+
+<style>
+    .navbar {
+		background: url("UACShub-background.jpg");
+		color: #eee;
+		width: 100%;
+
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		perspective: 150px;
+		perspective-origin: 50% 50%;
+		animation: animation 100s linear infinite;
+	}
+
+	@keyframes animation {
+		100% {
+			background-position:0px -3000px;
+		}
+	}
+
+	.navlink:hover {
+		color: #947d4b;
+	}
+
+    
+    /* Removes broken image icon since it always appears in the header upon entering an incorrect password */
+    img[alt]:after {  
+    display: block;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: #fff;
+    font-family: 'Helvetica';
+    font-weight: 300;
+    line-height: 2;  
+    text-align: left;
+    padding: 10px;
+    content: attr(alt);
+    }
+</style>
+
 <body>
-	<nav>
-		<h4>Node MySQL</h4>
-		<ul>
-			<li><a href="/">Home</a></li>
-			<li><a href="/login">Login</a></li>
-			<li><a href="/register">Register</a></li>
-		</ul>
+	<nav class="navbar sticky-top navbar-expand-lg navbar-light" style="background-color: transparent;">
+		<a class="navbar-brand" href="/">
+			<img src="logo.png" alt="UACSHub" style="width:308px;height:90px;">
+		</a>
+		<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+			<span class="navbar-toggler-icon"></span>
+		</button>
+		<div class="collapse navbar-collapse" id="navbarNav">
+			<ul class="navbar-nav ml-md-auto">
+				<li class="nav-item active">
+					<a class = "navlink" href="/">Home</a>
+				</li>
+				<li class="nav-item">
+					<a class = "navlink" href="/login">Login</a>
+				</li>
+				<li class="nav-item">
+					<a class = "navlink" href="/register">Register</a>
+				</li>
+			</ul>
+		</div>
 	</nav>
 
 	<div class = "container.mt-4">
