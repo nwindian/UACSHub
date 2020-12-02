@@ -54,12 +54,17 @@ db.connect ( (error) => {
 	}
 })
 
+var currentUserID = -1;
+var currentUserName = "";
+
 //Define Routes
 app.use('/', require('./routes/pages'));
 app.use('/auth', require('./routes/auth'));
 
 app.get('/getName', cors(), (req, res) => {
-	db.query("SELECT name FROM users WHERE loggedin=true", (err, rows, fields) => {
+	currentUserID = req.cookies.user;
+	currentUserName = req.cookies.name;
+	db.query(`SELECT name FROM users WHERE userid=${req.cookies.user}`, (err, rows, fields) => {
 	  if (!err)
 	  res.send(rows);
 	  else
@@ -68,7 +73,10 @@ app.get('/getName', cors(), (req, res) => {
   })
   
   app.get('/getEmail', cors(), (req, res) => {
-	db.query("SELECT email FROM users WHERE loggedin=true", (err, rows, fields) => {
+	
+	id = req.query.userid
+
+	db.query(`SELECT email FROM users WHERE userid=${req.cookies.user}`, (err, rows, fields) => {
 	  if (!err)
 	  res.send(rows);
 	  else
@@ -77,20 +85,14 @@ app.get('/getName', cors(), (req, res) => {
   })
 
   app.get('/getAttributes', cors(), (req, res) => {
-	db.query("SELECT userid FROM users WHERE loggedin=true", (err, row, field) => {
-		if (!err)
-		console.log(row)
-		id = row[0].userid
-		db.query(`SELECT u.userid, a.technology, a.class FROM users u inner join attributes a on u.userid = a.userid WHERE u.userid = ${id};`, (error, rows, fields) => {
+
+		db.query(`SELECT u.userid, a.technology, a.class, c.classname FROM users u inner join attributes a on ${req.cookies.user} = a.userid left join class c on a.class = c.classid WHERE u.userid = ${req.cookies.id};`, (error, rows, fields) => {
 			if (!error){
 				res.send(rows)
 			}
 			else
 				console.log(error)
 		});
-		if(err)
-			console.log(err)
-	})
   })
 
   
@@ -98,12 +100,8 @@ app.get('/getName', cors(), (req, res) => {
 	var data = JSON.parse(JSON.stringify(req.body.value))
 	console.log(data)
 	for(tech in data){
-		db.query("SELECT userid FROM users WHERE loggedin=true", (err, row, field) => {
 			
-			if (!err)
-			console.log(row)
-			id = row[0].userid
-			query = `DELETE FROM attributes a WHERE a.userid = ${id} AND technology = "${data[tech]}";`;
+			query = `DELETE FROM attributes a WHERE a.userid = ${req.cookies.user} AND technology = "${data[tech]}";`;
 			db.query(query, (error, rows, fields) => {
 				if (!error){
 					res.send(rows)
@@ -111,21 +109,15 @@ app.get('/getName', cors(), (req, res) => {
 				else
 					console.log(error)
 			});
-			if(err)
-				console.log(err)
-		})
+
 	}
   })
 
   app.post('/deleteClass', cors(), (req, res) => {
 	var data = JSON.parse(JSON.stringify(req.body.value))
 	for(tclass in data){
-		db.query("SELECT userid FROM users WHERE loggedin=true", (err, row, field) => {
 			
-			if (!err)
-			console.log(row)
-			id = row[0].userid
-			query = `DELETE FROM attributes a WHERE a.userid = ${id} AND class = "${data[tclass]}";`;
+			query = `DELETE FROM attributes a WHERE a.userid = ${req.cookies.user} AND class = "${data[tclass]}";`;
 			console.log(query)
 			db.query(query, (error, rows, fields) => {
 				if (!error){
@@ -134,9 +126,7 @@ app.get('/getName', cors(), (req, res) => {
 				else
 					console.log(error)
 			});
-			if(err)
-				console.log(err)
-		})
+
 	}
   })
 
@@ -151,58 +141,40 @@ app.get('/getName', cors(), (req, res) => {
 
   app.post('/addClass', cors(), (req, res) => {
 	var data = JSON.parse(JSON.stringify(req.body.value))
-	console.log(data)
 
-	db.query("SELECT userid FROM users WHERE loggedin=true", (err, row, field) => {
-		
-		if (!err)
-		console.log(row)
-		id = row[0].userid
-
-		query = `INSERT INTO attributes (userID, class) VALUES (${id}, '${data}');`;
-		console.log(query)
-		db.query(query, (error, rows, fields) => {
-			if (!error){
-				res.send(rows)
-			}
-			else
-				console.log(error)
-		});
-		if(err)
-			console.log(err)
-	})
+	query = `INSERT INTO attributes (userID, class) VALUES (${req.cookies.user}, '${data}');`;
+	db.query(query, (error, rows, fields) => {
+		if (!error){
+			res.send(rows)
+		}
+		else
+			console.log(error)
+	});
 	
   })
 
   app.post('/addTech', cors(), (req, res) => {
 	
 	data = req.body.value
-	console.log(req.body.value)
 
-	db.query("SELECT userid FROM users WHERE loggedin=true", (err, row, field) => {
-		
-		if (!err)
-			console.log(row)
-			id = row[0].userid
-			query = `INSERT INTO attributes (userID, technology) VALUES (${id}, '${data}')`;
-			console.log(query)
-			db.query(query, (error, rows, fields) => {
-				if (!error){
-					res.send(rows)
-				}
-				else
-					console.log(error)
-			});
-		if(err)
-			console.log(err)
-	})
+
+	query = `INSERT INTO attributes (userID, technology) VALUES (${req.cookies.user}, '${data}')`;
+	
+	db.query(query, (error, rows, fields) => {
+		if (!error){
+			res.send(rows)
+		}
+		else
+			console.log(error)
+	});
+
 	
   })
 
   app.get('/getUserName', cors(), (req, res) => {
-	db.query("SELECT name FROM users WHERE loggedin=true", (err, row, field) => {
+	db.query(`SELECT name FROM users WHERE userid=${req.cookies.user}`, (err, row, field) => {
 		if(!err){
-			console.log(row[0].name)
+			
 			res.send(row)
 		}
 		else{
@@ -215,12 +187,12 @@ app.get('/getName', cors(), (req, res) => {
 
 	io.on('connection', function(socket) {
 		socket.on('username', function(username) {
-			socket.username = username;
-			io.emit('is_online', '🔵 <i>' + socket.username + ' join the chat..</i>');
+			socket.username = username
+			io.emit('is_online', '🔵 <i>' + username + ' join the chat..</i>');
 		});
 
 		socket.on('disconnect', function(username) {
-			io.emit('is_online', '🔴 <i>' + socket.username + ' left the chat..</i>');
+			io.emit('is_online', '🔴 <i>' + username + ' left the chat..</i>');
 		})
 
 		socket.on('chat_message', function(message) {
@@ -231,6 +203,3 @@ app.get('/getName', cors(), (req, res) => {
   
 
 http.listen(8080)
-// app.listen(8080, () => {
-// 	console.log("Server started on port 8080");
-// })
