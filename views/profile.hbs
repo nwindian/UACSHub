@@ -34,6 +34,57 @@
 	.navlink:hover {
 		color: #947d4b;
 	}
+
+    .card {
+        box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+        max-width: 300px;
+        margin: auto;
+        text-align: center;
+    }
+
+    .title {
+        color: grey;
+        font-size: 18px;
+    }
+
+    .profile-button {
+        border: none;
+        outline: 0;
+        display: inline-block;
+        padding: 8px;
+        color: white;
+        background-color: #000;
+        text-align: center;
+        cursor: pointer;
+        width: 100%;
+        font-size: 18px;
+    }
+
+    .full-name {
+        font-size: 22px;
+        padding-top: 8px;
+    }
+
+    .fa {
+        text-decoration: none;
+        font-size: 18px;
+        color: black;
+    }
+
+    .profile-button:hover, a:hover {
+        opacity: 0.7;
+    }
+
+    .about {
+        padding-top: 1px;
+    }
+
+    .classlist-table {
+        padding-right: 10px;
+        padding-top: 50px;
+        padding-bottom: 800px;
+    }
+
 </style>
 
 <body>
@@ -56,249 +107,259 @@
 		</div>
 	</nav>
 
-    <div class="container">
-    <div class="header">
-        <div class="full-name" id="full-name">
-            <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-            <script>
-                $.ajax({
-                    type: "GET",
-                    url: "http://localhost:8080/getName",
-                    dataType: "json"
-                }).done(function (data){
-                    $('#full-name').text(data[0].name)
-                    document.cookie = `name=${data[0].name}`
-                }).fail(function(jqXHR, textStatus, errorThrown){
-                    alert("AJAX call failed: " + textStatus + ", " + errorThrown);
-                });
-            </script>
-        </div>
-        <div class="contact-info">
-            <span class="email">Email: </span>
-            <span class="email-val" id="email">
-                <script>
-                    $.ajax({
-                        type: "GET",
-                        url: "http://localhost:8080/getEmail",
-                        dataType: "json"
-                    }).done(function (data){
-                        $('#email').text(data[0].email)
-                    }).fail(function(jqXHR, textStatus, errorThrown){
-                        alert("AJAX call failed: " + textStatus + ", " + errorThrown);
-                    });     
-                </script>
-            </span>
-        </div>
-        
-        <div class="about">
-            <span class="position">Student </span>
-            <span class="desc">
-            </span>
-        </div>
-    </div>
-    <div class="details">
-        <div class="section">
-            <div class="section__title">
-            Classes
-            </div>
-            <div class="section__list">
-                <div class="section__list-item" id="list-item">
+    <div class="container" style="display: flex; height: 600px;">
+        <div style="width: 50%;">
+            <div class="card">
+                <img src="profile-picture.png" alt="John Doe" style="width:100%">
+                <div class="full-name" id="full-name">
+                    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
                     <script>
                         $.ajax({
                             type: "GET",
-                            url: "http://localhost:8080/getAttributes",
+                            url: "http://localhost:8080/getName",
                             dataType: "json"
                         }).done(function (data){
-                            for(i=0; i < data.length; i++){
-                                if (data[i].class != null)
-                                    $('#list-item').append(`<li><input type="checkbox" name="class-check" id=${data[i].class}/>  ${data[i].class} </li>`)
-                            }
-                        }).fail(function(jqXHR, textStatus, errorThrown){
-                            alert("AJAX call failed: " + textStatus + ", " + errorThrown);
-                        });                       
-                    </script>
-                    
-                </div>
-                <button type="button" id="delete-class">Delete</button>
-                <script>
-                    $(document).on('click', '#delete-class', function() {
-                            var checkboxes = document.getElementsByName('class-check');
-                            var checked = [];
-                            for (var i = 0; i < checkboxes.length; i++){
-                                if (checkboxes[i].checked) {
-                                    cname = checkboxes[i].id.slice(0,-1)
-                                    checked.push(cname)
-                                }
-                            }
-                            var xhr = new XMLHttpRequest();
-                            xhr.open("POST", "http://localhost:8080/deleteClass", true)
-                            xhr.setRequestHeader('Content-Type', 'application/json')
-                            
-                            xhr.send(JSON.stringify({
-                                value: checked
-                            }))
-                        
-                    });               
-                </script>
-            </div>
-        </div>
-        <div class="section">
-            <div class="section__title">Technologies</div>
-            <div class="skills">
-                <div class="skills__item" id="skills-item">
-                <div class="left"><div class="name">
-                    <script>
-                        $.ajax({
-                            type: "GET",
-                            url: "http://localhost:8080/getAttributes",
-                            dataType: "json"
-                        }).done(function (data){
-                            for(i=0; i < data.length; i++){
-                                if (data[i].technology != null)
-                                    $('#skills-item').append(`<li><input type="checkbox" id=${data[i].technology} name="technology-check"/> ${data[i].technology} </li>`)
-                            }
+                            $('#full-name').text(data[0].name)
+                            document.cookie = `name=${data[0].name}`
                         }).fail(function(jqXHR, textStatus, errorThrown){
                             alert("AJAX call failed: " + textStatus + ", " + errorThrown);
                         });
-
                     </script>
-                    </div></div>
                 </div>
-            <button type="button" id="delete-tech">Delete</button>
+                <div class="contact-info">
+                    <span class="email">Email: </span>
+                    <span class="email-val" id="email">
+                        <script>
+                            $.ajax({
+                                type: "GET",
+                                url: "http://localhost:8080/getEmail",
+                                dataType: "json"
+                            }).done(function (data){
+                                $('#email').text(data[0].email)
+                            }).fail(function(jqXHR, textStatus, errorThrown){
+                                alert("AJAX call failed: " + textStatus + ", " + errorThrown);
+                            });     
+                        </script>
+                    </span>
+                    <div class="about">
+                        <p class="position">Student</p>
+                    </div>
+                </div>
+                
+                <a href="#"><i class="fa fa-dribbble"></i></a>
+                <a href="#"><i class="fa fa-twitter"></i></a>
+                <a href="#"><i class="fa fa-linkedin"></i></a>
+                <a href="#"><i class="fa fa-facebook"></i></a>
+
+                <p>
+                    <form action="https://google.com">
+                        <input class="profile-button" type="submit" value="Contact" />
+                    </form>
+                </p>
+            </div>
+        </div>
+
+        <div style="flex-grow: 1">
+            <div class="details">
+                <div class="section">
+                    <div class="section__title">
+                        Classes
+                    </div>
+                    <div class="section__list">
+                        <div class="section__list-item" id="list-item">
+                            <script>
+                                $.ajax({
+                                    type: "GET",
+                                    url: "http://localhost:8080/getAttributes",
+                                    dataType: "json"
+                                }).done(function (data){
+                                    for(i=0; i < data.length; i++){
+                                        if (data[i].class != null)
+                                            $('#list-item').append(`<li><input type="checkbox" name="class-check" id=${data[i].class}/>  ${data[i].class} </li>`)
+                                    }
+                                }).fail(function(jqXHR, textStatus, errorThrown){
+                                    alert("AJAX call failed: " + textStatus + ", " + errorThrown);
+                                });                       
+                            </script>
+                        </div>
+                        <button type="button" id="delete-class">Delete</button>
+                        <script>
+                            $(document).on('click', '#delete-class', function() {
+                                    var checkboxes = document.getElementsByName('class-check');
+                                    var checked = [];
+                                    for (var i = 0; i < checkboxes.length; i++){
+                                        if (checkboxes[i].checked) {
+                                            cname = checkboxes[i].id.slice(0,-1)
+                                            checked.push(cname)
+                                        }
+                                    }
+                                    var xhr = new XMLHttpRequest();
+                                    xhr.open("POST", "http://localhost:8080/deleteClass", true)
+                                    xhr.setRequestHeader('Content-Type', 'application/json')
+                                    
+                                    xhr.send(JSON.stringify({
+                                        value: checked
+                                    }))
+                            });               
+                        </script>
+                    </div>
+                </div>
+                <div class="section">
+                    <div class="section__title">Technologies</div>
+                    <div class="skills">
+                        <div class="skills__item" id="skills-item">
+                        <div class="left"><div class="name">
+                            <script>
+                                $.ajax({
+                                    type: "GET",
+                                    url: "http://localhost:8080/getAttributes",
+                                    dataType: "json"
+                                }).done(function (data){
+                                    for(i=0; i < data.length; i++){
+                                        if (data[i].technology != null)
+                                            $('#skills-item').append(`<li><input type="checkbox" id=${data[i].technology} name="technology-check"/> ${data[i].technology} </li>`)
+                                    }
+                                }).fail(function(jqXHR, textStatus, errorThrown){
+                                    alert("AJAX call failed: " + textStatus + ", " + errorThrown);
+                                });
+
+                            </script>
+                            </div></div>
+                        </div>
+                    <button type="button" id="delete-tech">Delete</button>
+                    <script>
+                        $(document).on('click', '#delete-tech', function() {
+                                var checkboxes = document.getElementsByName('technology-check');
+                                var checked = [];
+                                for (var i = 0; i < checkboxes.length; i++){
+                                    if (checkboxes[i].checked) {
+                                        checked.push(checkboxes[i].id)
+                                    }
+                                }
+                                var xhr = new XMLHttpRequest();
+                                xhr.open("POST", "http://localhost:8080/deleteTechnology", true)
+                                xhr.setRequestHeader('Content-Type', 'application/json')
+                                
+                                xhr.send(JSON.stringify({
+                                    value: checked
+                                }))
+                            
+                        });               
+                    </script>
+                    <button type="button" id="addTechBtn">Add</button>
+                    <input type="text" id="addTech" class="addTech">
+                    <script>
+                        $(document).on('click', '#addTechBtn', function() {
+                            var tech = document.getElementById('addTech').value
+
+                            var xhr = new XMLHttpRequest();
+                            xhr.open("POST", "http://localhost:8080/addTech", true)
+                            xhr.setRequestHeader('Content-Type', 'application/json')
+                            
+
+
+                            test = JSON.stringify({
+                                value: tech
+                            })
+
+                            xhr.send(test)
+                        });
+                    </script>
+                    </div>           
+                </div>
+                <div class="section">
+                    <div class="section__title">
+                        Interests
+                    </div>
+                    <div class="section__list">
+                        <div class="section__list-item">
+                            Programming, Video Games, Hiking, Skateboarding
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+    
+    <div class="classlist-table">
+        
+        <table id="classtable">
+        <thead>
+            <tr>
+            <th>Add Class</th>
+            <th>Class ID</th>
+            <th>Class Name</th>
+            </tr>
+        <thead>
+        <tbody id="tbody">
             <script>
-                $(document).on('click', '#delete-tech', function() {
-                        var checkboxes = document.getElementsByName('technology-check');
-                        var checked = [];
-                        for (var i = 0; i < checkboxes.length; i++){
-                            if (checkboxes[i].checked) {
-                                checked.push(checkboxes[i].id)
+                $(document).ready(() => {
+                    var xhr = new XMLHttpRequest();
+                    xhr.onreadystatechange = function(){
+                        if(xhr.readyState == XMLHttpRequest.DONE) {
+                            var body = JSON.parse(xhr.response)
+                                console.log(body)
+                                console.log(body[0].classid)
+
+                            for(var i = 0; i < body.length; i++){
+                                var row = document.createElement("tr")
+                                var element = document.getElementById("tbody")
+                                
+                                var addcol = document.createElement("td")
+                                var addcolb = document.createElement("button")
+                                addcolb.id = 'addClassButton'
+                                addcolb.class = body[i].classid
+                                var addcolbtext = document.createTextNode("Add Class")
+
+                                addcolb.appendChild(addcolbtext)
+                                addcol.appendChild(addcolb)
+                                row.appendChild(addcol)
+
+                                var classid = body[i].classid
+                                var idcol = document.createElement("td")
+                                var idtext = document.createTextNode(classid.toString())
+                                idcol.appendChild(idtext)
+                                row.appendChild(idcol)
+
+                                var classname = body[i].classname
+                                var namecol = document.createElement("td")
+                                var nametest = document.createTextNode(classname)
+                                namecol.appendChild(nametest)
+                                row.appendChild(namecol)
+
+                                element.appendChild(row)                  
                             }
+
                         }
+                    }
+                    xhr.open("GET", "http://localhost:8080/getClass")
+                    xhr.setRequestHeader('Content-Type', 'application/json')
+                    
+                    xhr.send()
+                }
+                )
+            </script> 
+            <script>
+                $(document).on('click', '#addClassButton', function() {
+                        var classid = this.class
+                        
+
                         var xhr = new XMLHttpRequest();
-                        xhr.open("POST", "http://localhost:8080/deleteTechnology", true)
+                        xhr.open("POST", "http://localhost:8080/addClass", true)
                         xhr.setRequestHeader('Content-Type', 'application/json')
                         
                         xhr.send(JSON.stringify({
-                            value: checked
+                            value: classid
                         }))
                     
                 });               
             </script>
-            <button type="button" id="addTechBtn">Add</button>
-            <input type="text" id="addTech" class="addTech">
-            <script>
-                $(document).on('click', '#addTechBtn', function() {
-                    var tech = document.getElementById('addTech').value
+        </tbody>
+        <table/>
+   </div>   
 
-                    var xhr = new XMLHttpRequest();
-                    xhr.open("POST", "http://localhost:8080/addTech", true)
-                    xhr.setRequestHeader('Content-Type', 'application/json')
-                    
-
-
-                    test = JSON.stringify({
-                        value: tech
-                    })
-
-                    xhr.send(test)
-                });
-            </script>
-            </div>           
-        </div>
-        <div class="section">
-            <div class="section__title">
-            Interests
-            </div>
-        <div class="section__list">
-            <div class="section__list-item">
-                    Programming, Video Games, Hiking, Skateboarding
-            </div>
-        </div>
-        </div>
-        </div>
-    </div>
-    </div>
-
-
-    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
-
-  <h2 id="classlist">Classlist</h2>
-    <table id="classtable">
-      <thead>
-        <tr>
-          <th>Add Class</th>
-          <th>Class id</th>
-          <th>Class name</th>
-        </tr>
-      <thead>
-      <tbody id="tbody">
-        <script>
-            $(document).ready(() => {
-                var xhr = new XMLHttpRequest();
-                xhr.onreadystatechange = function(){
-                    if(xhr.readyState == XMLHttpRequest.DONE) {
-                        var body = JSON.parse(xhr.response)
-                            console.log(body)
-                            console.log(body[0].classid)
-
-                        for(var i = 0; i < body.length; i++){
-                            var row = document.createElement("tr")
-                            var element = document.getElementById("tbody")
-                            
-                            var addcol = document.createElement("td")
-                            var addcolb = document.createElement("button")
-                            addcolb.id = 'addClassButton'
-                            addcolb.class = body[i].classid
-                            var addcolbtext = document.createTextNode("Add Class")
-
-                            addcolb.appendChild(addcolbtext)
-                            addcol.appendChild(addcolb)
-                            row.appendChild(addcol)
-
-                            var classid = body[i].classid
-                            var idcol = document.createElement("td")
-                            var idtext = document.createTextNode(classid.toString())
-                            idcol.appendChild(idtext)
-                            row.appendChild(idcol)
-
-                            var classname = body[i].classname
-                            var namecol = document.createElement("td")
-                            var nametest = document.createTextNode(classname)
-                            namecol.appendChild(nametest)
-                            row.appendChild(namecol)
-
-                            element.appendChild(row)                  
-                        }
-
-                    }
-                }
-                xhr.open("GET", "http://localhost:8080/getClass")
-                xhr.setRequestHeader('Content-Type', 'application/json')
-                
-                xhr.send()
-            }
-            )
-        </script> 
-        <script>
-            $(document).on('click', '#addClassButton', function() {
-                    var classid = this.class
-                    
-
-                    var xhr = new XMLHttpRequest();
-                    xhr.open("POST", "http://localhost:8080/addClass", true)
-                    xhr.setRequestHeader('Content-Type', 'application/json')
-                    
-                    xhr.send(JSON.stringify({
-                        value: classid
-                    }))
-                
-            });               
-        </script>
-      </tbody>
-    <table/>
-      
-
-</div>
 <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
 </body>
 </html>
