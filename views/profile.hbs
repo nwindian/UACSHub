@@ -37,6 +37,7 @@
 </style>
 
 <body>
+
 	<nav class="navbar sticky-top navbar-expand-lg navbar-light" style="background-color: transparent;">
 		<a class="navbar-brand" href="/">
 			<img src="logo.png" alt="logo" style="width:308px;height:90px;">
@@ -54,6 +55,7 @@
 				</li>
 			</ul>
 		</div>
+
 	</nav>
 
     <div class="container">
@@ -68,6 +70,20 @@
                 }).done(function (data){
                     $('#full-name').text(data[0].name)
                     document.cookie = `name=${data[0].name}`
+                    var count = 0;
+                    var id = -1;
+                    for (i = 0; i < document.cookie.length; i++) {
+                        
+                        if(document.cookie[i] == '%'){
+                            count++;
+                        }
+                        if(count == 4) {
+                            id = document.cookie[i + 4];
+                        }
+                        
+                    }
+                    document.cookie = `id=${id}`
+                    
                 }).fail(function(jqXHR, textStatus, errorThrown){
                     alert("AJAX call failed: " + textStatus + ", " + errorThrown);
                 });
@@ -77,10 +93,16 @@
             <span class="email">Email: </span>
             <span class="email-val" id="email">
                 <script>
+                    idindex = document.cookie.indexOf("id=")
+                    id = document.cookie[idindex + 3]
+                    //window.sessionStorage.setItem('userID', id)
                     $.ajax({
                         type: "GET",
                         url: "http://localhost:8080/getEmail",
-                        dataType: "json"
+                        dataType: "json",
+                        data: {
+                            userid: id
+                        }
                     }).done(function (data){
                         $('#email').text(data[0].email)
                     }).fail(function(jqXHR, textStatus, errorThrown){
@@ -104,14 +126,19 @@
             <div class="section__list">
                 <div class="section__list-item" id="list-item">
                     <script>
+                        idindex = document.cookie.indexOf("id=")
+                        id = document.cookie[idindex + 3]
                         $.ajax({
                             type: "GET",
                             url: "http://localhost:8080/getAttributes",
-                            dataType: "json"
+                            dataType: "json",
+                            data: {
+                                userid: id
+                            }
                         }).done(function (data){
                             for(i=0; i < data.length; i++){
                                 if (data[i].class != null)
-                                    $('#list-item').append(`<li><input type="checkbox" name="class-check" id=${data[i].class}/>  ${data[i].class} </li>`)
+                                    $('#list-item').append(`<li><input type="checkbox" name="class-check" id=${data[i].class}/>  ${data[i].classname} </li>`)
                             }
                         }).fail(function(jqXHR, textStatus, errorThrown){
                             alert("AJAX call failed: " + textStatus + ", " + errorThrown);
@@ -205,16 +232,7 @@
             </script>
             </div>           
         </div>
-        <div class="section">
-            <div class="section__title">
-            Interests
-            </div>
-        <div class="section__list">
-            <div class="section__list-item">
-                    Programming, Video Games, Hiking, Skateboarding
-            </div>
-        </div>
-        </div>
+
         </div>
     </div>
     </div>

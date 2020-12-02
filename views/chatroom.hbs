@@ -90,11 +90,19 @@
             });
             // append text if someone is online
             socket.on('is_online', function(username) {
-                var name = document.cookie.slice(5);
                 $('#messages').append($('<li>').html(username));
             });
             // ask username
-            var name = document.cookie.slice(5);
+    var namekey = "name=";
+    var name = "";
+    var ca = document.cookie.split(';');
+    for (var i = 0; i < ca.length; i++) {
+        var c = ca[i].trim();
+        if ((c.indexOf(namekey)) == 0) {
+            name = c.substr(namekey.length);
+        }
+
+    }
             socket.emit('username', name);
     </script>
   </body>
