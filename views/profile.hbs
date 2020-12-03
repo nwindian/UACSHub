@@ -85,6 +85,11 @@
         padding-bottom: 800px;
     }
 
+    .two-buttons {
+        padding-top: 10px;
+        padding-bottom: 25px;
+    }
+
 </style>
 
 <body>
@@ -178,9 +183,7 @@
             </div>
         </div>
 
-        <div class="details">
-            
-
+        <div class="details">  
             <div style="flex-grow: 1;">
                 <div class="details">
                     <div class="section">
@@ -189,7 +192,7 @@
                         </div>
                         <div class="section__list">
                             
-                            <button type="button" id="delete-class">Delete</button>
+                            <button type="button" class="btn btn-danger btn-sm" id="delete-class">Delete</button>
                             <script>
                                 $(document).on('click', '#delete-class', function() {
                                         var checkboxes = document.getElementsByName('class-check');
@@ -207,6 +210,7 @@
                                         xhr.send(JSON.stringify({
                                             value: checked
                                         }))
+                                        location.reload();
                                 });               
                             </script>
                             <div class="section">
@@ -250,7 +254,7 @@
                                                 url: "http://localhost:8080/getAttributes",
                                                 dataType: "json"
                                             }).done(function (data){
-                                                for(i=0; i < data.length; i++){
+                                                for(i=1; i < data.length; i++){
                                                     if (data[i].technology != null)
                                                         $('#skills-item').append(`<li><input type="checkbox" id=${data[i].technology} name="technology-check"/> ${data[i].technology} </li>`)
                                                 }
@@ -275,13 +279,16 @@
                                                 xhr.send(JSON.stringify({
                                                     value: checked
                                                 }))
-                                            
+                                                location.reload();
                                         });               
                                     </script>
 
                                     <input type="text" id="addTech" class="addTech">
-                                    <button type="button" id="addTechBtn">Add</button>
-                                    <button type="button" id="delete-tech">Delete</button>
+                                    <div class="two-buttons">
+                                        <button type="button" class="btn btn-primary btn-sm" id="addTechBtn">Add</button>
+                                        <button type="button" class="btn btn-danger btn-sm" id="delete-tech">Delete</button>
+                                    </div>
+                                    
                                     <script>
                                         $(document).on('click', '#addTechBtn', function() {
                                             var tech = document.getElementById('addTech').value
@@ -295,6 +302,7 @@
                                             })
 
                                             xhr.send(test)
+                                            location.reload();
                                         });
                                     </script>
                                 </div>           
@@ -378,8 +386,6 @@
             <script>
                 $(document).on('click', '#addClassButton', function() {
                         var classid = this.class
-                        
-
                         var xhr = new XMLHttpRequest();
                         xhr.open("POST", "http://localhost:8080/addClass", true)
                         xhr.setRequestHeader('Content-Type', 'application/json')
@@ -387,7 +393,7 @@
                         xhr.send(JSON.stringify({
                             value: classid
                         }))
-                    
+                     location.reload();
                 });               
             </script>
         </tbody>
