@@ -32,7 +32,8 @@ const db = mysql.createConnection({
 	host     : process.env.DATABASE_HOST,
 	user     : process.env.DATABASE_USER,
 	password : process.env.DATABASE_PASSWORD,
-	database : process.env.DATABASE
+	database : process.env.DATABASE,
+	multipleStatements: true
 });
 
 const publicDirectory = path.join(__dirname, './public');
@@ -99,35 +100,39 @@ app.get('/getName', cors(), (req, res) => {
   app.post('/deleteTechnology', cors(), (req, res) => {
 	var data = JSON.parse(JSON.stringify(req.body.value))
 	console.log(data)
+	techArray = []
 	for(tech in data){
 			
 			query = `DELETE FROM attributes a WHERE a.userid = ${req.cookies.user} AND technology = "${data[tech]}";`;
 			db.query(query, (error, rows, fields) => {
 				if (!error){
-					res.send(rows)
+					techArray += rows
 				}
 				else
 					console.log(error)
 			});
 
 	}
+	res.send(techArray)
   })
 
   app.post('/deleteClass', cors(), (req, res) => {
 	var data = JSON.parse(JSON.stringify(req.body.value))
+	classArray = []
 	for(tclass in data){
 			
 			query = `DELETE FROM attributes a WHERE a.userid = ${req.cookies.user} AND class = "${data[tclass]}";`;
 			console.log(query)
 			db.query(query, (error, rows, fields) => {
 				if (!error){
-					res.send(rows)
+					classArray += rows
 				}
 				else
 					console.log(error)
 			});
 
 	}
+	res.send(classArray)
   })
 
   app.get('/getClass', cors(), (req, res) => {
