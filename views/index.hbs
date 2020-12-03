@@ -35,24 +35,24 @@
 	.fb-page {
 		padding: 25px;
 		padding-top: 0px;
+		border-radius: 6px;
 	}
 
 	.jumbotron { 
 		max-height: 250px; 
 	}
-	
-	.dropdown .nav-link {color:#fff; text-decoration: none;}
-	.dropdown .btn {background: #00275d; color:#fff;}
-	.dropdown .btn:hover {background: #00275d;}
-	.dropdown .btn:active {background: #00275d;}
-	.dropdown .btn:focus {background: #00275d;}
-	.dropdown-menu .dropdown-item {display: inline-block; width: 100%; padding: 10px 5px;}
-	.container .dropdown .dropdown-menu a:hover
-	{
-	color: #fff;
-	background-color: #b91773;
-	border-color: #fff;
+
+	.btn-primary:active { background-color:#1f4d8d !important; }
+	.btn-primary, .btn-primary:hover, .btn-primary:visited  {
+    	background-color:#00275d !important;
 	}
+
+	.discord-logo:hover {
+		border-radius: 6px;
+  		box-shadow: 0px 0px 10px #92c0ff;
+}
+}
+
 </style>
 
 <body>
@@ -89,7 +89,7 @@
 			</div>
 			<div style="margin-left: 50%; height: 100px"; align="right"> 
 				<a class="navbar-brand" href="https://discord.com/channels/624782559934677003/628741261557366787">
-					<img src="UACShub-discord.png" alt="logo";>
+					<img src="UACShub-discord.png" alt="logo" class="discord-logo";>
 				</a>
 			</div>
 
@@ -109,10 +109,31 @@
 			</div>	
 	</div>
 
-	<div class="fb-page" data-href="https://www.facebook.com/uakroncs" data-tabs="timeline" data-width="" data-height="" data-small-header="false" data-adapt-container-width="true" data-hide-cover="false" data-show-facepile="true">
-		<blockquote cite="https://www.facebook.com/uakroncs" class="fb-xfbml-parse-ignore">
-			<a href="https://www.facebook.com/uakroncs">Facebook</a>
-		</blockquote>
+	<div style="width: 100%;">
+		<div style="width: 25%; height: 100px; float: left;"> 
+			<div class="fb-page" data-href="https://www.facebook.com/uakroncs" data-tabs="timeline" data-width="" data-height="" data-small-header="false" data-adapt-container-width="true" data-hide-cover="false" data-show-facepile="true">
+				<blockquote cite="https://www.facebook.com/uakroncs" class="fb-xfbml-parse-ignore">
+					<a href="https://www.facebook.com/uakroncs">Facebook</a>
+				</blockquote>
+			</div>
+		</div>
+		<div style="margin-left: 25%; height: 100px;">
+			<div class="announcement-box">
+				<div class="card text-center">
+					<div class="card-header">
+						Featured
+					</div>
+					<div class="card-body">
+						<h5 class="card-title">Book an advising appointment today!</h5>
+						<p class="card-text">With the 2021 semester fast approaching, now is a great time to make an appointment with your CS advisor</p>
+						<a href="https://outlook.office365.com/owa/calendar/TheUniversityOfAkronCollegeofEngineering@uakron.edu/bookings/" class="btn btn-primary">Book Now</a>
+					</div>
+					<div class="card-footer text-muted">
+						2 days ago
+					</div>
+				</div>
+			</div>
+		</div>
 	</div>
 
 	<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
