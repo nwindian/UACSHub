@@ -86,6 +86,7 @@ exports.register = (req, res) => {
             }
             else {
                 console.log(results);
+                res.status(200).redirect("/"); // redirect to homepage
                 return res.render('register', {
                     message: 'User registered'
                 });

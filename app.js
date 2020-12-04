@@ -158,6 +158,24 @@ app.get('/getName', cors(), (req, res) => {
 	
   })
 
+  app.post('/updateName', cors(), (req, res) => {
+	
+	data = req.body.value
+
+
+	query = `UPDATE users SET name = '${data}' WHERE userID= ${req.cookies.user};`;
+	
+	db.query(query, (error, rows, fields) => {
+		if (!error){
+			res.send(rows)
+		}
+		else
+			console.log(error)
+	});
+
+	
+  })
+
   app.post('/addTech', cors(), (req, res) => {
 	
 	data = req.body.value
@@ -193,11 +211,11 @@ app.get('/getName', cors(), (req, res) => {
 	io.on('connection', function(socket) {
 		socket.on('username', function(username) {
 			socket.username = username
-			io.emit('is_online', '🔵 <i>' + username + ' join the chat..</i>');
+			io.emit('is_online', '🔵 <i>' + username + ' joined the chat...</i>');
 		});
 
 		socket.on('disconnect', function(username) {
-			io.emit('is_online', '🔴 <i>' + username + ' left the chat..</i>');
+			io.emit('is_online', '🔴 <i>' + username + ' left the chat...</i>');
 		})
 
 		socket.on('chat_message', function(message) {

@@ -115,8 +115,25 @@
 	</nav>
 
     <div class="container" style="display: flex; height: 600px;"> 
+        
         <div style="width: 50%;">
             <div class="card">
+                    <input type="text" id="changeName" class="changeName">
+                    <button type="button" id="changeNameBtn" class="changeNameBtn">Change Name</button>
+                    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+                    <script>
+                        $(document).on('click', '#changeNameBtn', function() {
+                                var name = document.getElementById('changeName').value
+                                var xhr = new XMLHttpRequest();
+                                xhr.open("POST", "http://localhost:8080/updateName", true)
+                                xhr.setRequestHeader('Content-Type', 'application/json')
+                                
+                                xhr.send(JSON.stringify({
+                                    value: name
+                                }))
+                                location.reload();
+                        }); 
+                    </script>
                 <img src="profile-picture.png" alt="John Doe" style="width:100%">
                 <div class="full-name" id="full-name">
                     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
@@ -153,7 +170,6 @@
                         <script>
                             idindex = document.cookie.indexOf("id=")
                             id = document.cookie[idindex + 3]
-                            //window.sessionStorage.setItem('userID', id)
                             $.ajax({
                                 type: "GET",
                                 url: "http://localhost:8080/getEmail",
@@ -176,7 +192,7 @@
                 <a href="#"><i class="fa fa-facebook"></i></a>
 
                 <p>
-                    <form action="https://google.com">
+                    <form action="https://mail.google.com/mail/u/0/#inbox?compose=new">
                         <input class="profile-button" type="submit" value="Contact" />
                     </form>
                 </p>
@@ -306,16 +322,6 @@
                                         });
                                     </script>
                                 </div>           
-                            </div>
-                            <div class="section">
-                                <div class="section__title">
-                                    Interests
-                                </div>
-                                <div class="section__list">
-                                    <div class="section__list-item">
-                                        Programming, Video Games, Hiking, Skateboarding
-                                    </div>
-                                </div>
                             </div>
                         </div>
                     </div>
